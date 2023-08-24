@@ -1,35 +1,35 @@
 
 import { useState } from "react";
 
-const courses = [
-  {
-    id: 1,
-    name: 'HTML, CSS'
-  },
-  {
-    id: 2,
-    name: 'Javascript'
-  },
-  {
-    id: 3,
-    name: 'NodeJS'
-  }
-]
 
 function App() {
-
   const [act, setAct] = useState('');
-  const [acts, setActs] = useState([]);
-
+  const [acts, setActs] = useState(() => {
+    return JSON.parse(localStorage.getItem('jobs')) ?? [];
+  });
 
   const addToDo = () => {
-    setActs(prev => [...prev, act]);
+    setActs(prev => {
+      const jobs = [...prev, act];
+
+      localStorage.setItem('jobs', JSON.stringify(jobs));
+
+      return jobs;
+    });
     setAct('');
   }
 
   const removeAct = (index) => {
-    setActs(prev => prev.filter((a, i) => i !== index));
+    setActs(prev => {
+      let jobs = prev.filter((a, i) => i !== index);
+
+      localStorage.setItem('jobs', JSON.stringify(jobs));
+
+      return jobs;
+    })
   }
+
+
 
   return (
     <div className="App" style={{ padding: '35px' }}>
