@@ -16,44 +16,40 @@ const courses = [
   }
 ]
 
-
-let clicked = false;
 function App() {
 
-  const [checked, setChecked] = useState([]);
+  const [act, setAct] = useState('');
+  const [acts, setActs] = useState([]);
 
-  console.log(checked);
 
-  const handleCheck = (id) => {
-    setChecked(checked => {
-      if (checked.includes(id)) {
-        return checked.filter(num => num !== id);
-      }
-      else return [...checked, id];
-    })
+  const addToDo = () => {
+    setActs(prev => [...prev, act]);
+    setAct('');
   }
 
-  const handleSubmit = () => {
-
+  const removeAct = (index) => {
+    setActs(prev => prev.filter((a, i) => i !== index));
   }
 
   return (
     <div className="App" style={{ padding: '35px' }}>
-      {
-        courses.map((value) => {
-          return (
-            <div key={value.id}>
-              <input
-                type="checkbox"
-                checked={checked.includes(value.id)}
-                onChange={() => handleCheck(value.id)}
-              />
-              {value.name}
-            </div>
-          )
-        })
-      }
-      <button onClick={handleSubmit}>Submit</button>
+      <input
+        value={act}
+        onChange={(a) => setAct(a.target.value)}
+      />
+      <button onClick={addToDo}>Add</button>
+
+      <ul>
+        {
+          acts.map((value, index) => (
+            <li key={index}>
+              {value}
+              <button onClick={() => removeAct(index)}>Remove</button>
+            </li>
+          ))
+        }
+
+      </ul>
     </div>
   );
 }
