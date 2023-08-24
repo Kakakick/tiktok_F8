@@ -34,7 +34,7 @@ function App() {
   }
 
   const handleSubmit = () => {
-
+      console.log({ ids: checked })
   }
 
   return (
