@@ -1,50 +1,30 @@
 
 import { useState } from "react";
 
+const gifts = [
+  'CPU i9',
+  'RAM 32GB RGB',
+  'RGB Keyboard'
+]
 
 function App() {
 
-  const [info, setInfo] = useState({
-    name: 'Tuan Anh',
-    age: 19,
-    marriage: false
-  })
+  const [gift, setGift] = useState();
 
-  const handleUpdate = () => {
-    setInfo(() => {
-      Object.keys(info).map((obj, index) => {
-        if (info[obj] === false) {
-          info[obj] = 'false';
-        }
-        return 0;
-      });
-      
-      return ({
-        ...info,
-        bio: 'From Thanh Hoa'
-      })
+  const handleGift = () => (
+    setGift(() => {
+      return gifts[Math.floor(Math.random() * gifts.length)];
     })
-  }
-
-  function Component() {
-    return (
-      <div> {
-        Object.keys(info).map((obj, index) => (
-            <p key={index}>
-              {obj} : {info[obj]}
-            </p>
-          )
-        )}
-      </div>
-    )
-  }
+  )
 
   return (
     <div className="App" style={{ padding: '20px' }}>
       <h1>
-        <Component />
+        {gift || 'You do not have a gift'}
       </h1>
-      <button onClick={handleUpdate}>Update</button>
+      <button onClick={handleGift}>
+        Get Gift
+      </button>
     </div>
   );
 }
