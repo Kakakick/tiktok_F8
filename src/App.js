@@ -19,6 +19,7 @@ function App() {
     setAct('');
   }
 
+
   const removeAct = (index) => {
     setActs(prev => {
       let jobs = prev.filter((a, i) => i !== index);
