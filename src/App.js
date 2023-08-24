@@ -27,8 +27,10 @@ function App() {
     setAct('');
   }
 
+
   const removeAct = (index) => {
     setActs(prev => prev.filter((a, i) => i !== index));
+
   }
 
   return (
