@@ -1,3 +1,4 @@
+import { logDOM } from "@testing-library/react";
 import { type } from "@testing-library/user-event/dist/type";
 import { useEffect, useState } from "react"
 
@@ -16,6 +17,7 @@ const tabs = ['posts', 'comments', 'albums'];
 //--------
 // => tất cả callback đều đc gọi sau khi component mounted lần đầu tiên
 
+
 function Content() {
     const [title, setTitle] = useState('');
     const [posts, setPosts] = useState([]);
@@ -28,6 +30,25 @@ function Content() {
                 setPosts(data);
             })
     }, [currentTab]);
+
+    
+    useEffect(() => {
+        const handleScroll = () => {
+            let scrollBtn = document.getElementById('scrollButton');
+            if (window.scrollY >= 250) {
+                scrollBtn.style.display = 'block';
+            }
+            else {
+                scrollBtn.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll)
+    }, [])
+
+    const upToTop = () => {
+        window.scrollTo({top: 0, behavior: "smooth"})
+    }
 
     return (
         <div>
@@ -56,6 +77,16 @@ function Content() {
                     </li>
                 ))}
             </ul>
+            
+                
+                <button
+                    id="scrollButton"
+                    onClick={upToTop}
+                    style={{ position: 'fixed', bottom: '20px', right: '20px', display: "none"}}
+                >
+                    Up
+                </button>
+            
         </div>
     )
 }
