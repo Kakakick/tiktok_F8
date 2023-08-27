@@ -16,77 +16,35 @@ const tabs = ['posts', 'comments', 'albums'];
 
 //--------
 // => tất cả callback đều đc gọi sau khi component mounted lần đầu tiên
+// => Cleanup function luôn đc gọi trước khi component unmouted
 
 
 function Content() {
-    const [title, setTitle] = useState('');
-    const [posts, setPosts] = useState([]);
-    const [currentTab, setCurrentTab] = useState(0);
+    const [time, setTime] = useState(3);
 
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/' + tabs[currentTab])
-            .then(res => res.json())
-            .then(data => {
-                setPosts(data);
-            })
-    }, [currentTab]);
 
-    
-    useEffect(() => {
-        const handleScroll = () => {
-            let scrollBtn = document.getElementById('scrollButton');
-            if (window.scrollY >= 250) {
-                scrollBtn.style.display = 'block';
+        const handleTimer = () => {
+            if (time === 0) {
+                clearInterval(interval);
+                alert('Het gio');
             }
             else {
-                scrollBtn.style.display = 'none';
+                setTime(pretime => pretime - 1);
             }
         }
 
-        window.addEventListener('scroll', handleScroll)
-    }, [])
+        const interval = setInterval(handleTimer, 1000);
 
-    const upToTop = () => {
-        window.scrollTo({top: 0, behavior: "smooth"})
-    }
+        return () => {
+            clearInterval(interval);
+        }
+
+    }, [time])
 
     return (
         <div>
-            {tabs.map((tab, index) => (
-                <button
-                    key={index}
-                    style={tabs[currentTab] === tab ? {
-                        color: '#fff',
-                        backgroundColor: 'black'
-                    } : {
-
-                    }}
-                    onClick={() => setCurrentTab(index)}
-                >
-                    {tab}
-                </button>
-            ))}
-            <input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)} // Sửa a thành e
-            />
-            <ul>
-                {posts.map(post => (
-                    <li key={post.id}>
-                        {currentTab === 1 ? post.name : post.title}
-                    </li>
-                ))}
-            </ul>
-            
-                
-                <button
-                    id="scrollButton"
-                    onClick={upToTop}
-                    style={{ position: 'fixed', bottom: '20px', right: '20px', display: "none"}}
-                >
-                    Up
-                </button>
-            
+            <h1>{time}</h1>
         </div>
     )
 }
