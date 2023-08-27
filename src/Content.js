@@ -17,22 +17,28 @@ const tabs = ['posts', 'comments', 'albums'];
 //--------
 // => tất cả callback đều đc gọi sau khi component mounted lần đầu tiên
 // => Cleanup function luôn đc gọi trước khi component unmouted
+// => Cleanup function luôn đc gọi trước khi callback được gọi (trừ lần mounted)
 
 
 function Content() {
     const [time, setTime] = useState(3);
 
+    console.log('re-render');
+
     useEffect(() => {
 
         const handleTimer = () => {
-            if (time === 0) {
-                clearInterval(interval);
-                alert('Het gio');
-            }
-            else {
-                setTime(pretime => pretime - 1);
-            }
-        }
+            setTime(pretime => {
+                if (pretime === 0) {
+                    clearInterval(interval);
+                    alert('Het gio');
+                    return pretime;
+                }
+                else {
+                    return pretime - 1;
+                }
+            })}
+
 
         const interval = setInterval(handleTimer, 1000);
 
@@ -40,7 +46,7 @@ function Content() {
             clearInterval(interval);
         }
 
-    }, [time])
+    }, [])
 
     return (
         <div>
