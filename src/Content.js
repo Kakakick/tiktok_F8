@@ -1,8 +1,6 @@
-import { logDOM } from "@testing-library/react";
-import { type } from "@testing-library/user-event/dist/type";
+
 import { useEffect, useState } from "react"
 
-const tabs = ['posts', 'comments', 'albums'];
 
 // 1. useEffect(callback)
 // - Gọi callback mỗi lần khi component re-render
@@ -19,38 +17,56 @@ const tabs = ['posts', 'comments', 'albums'];
 // => Cleanup function luôn đc gọi trước khi component unmouted
 // => Cleanup function luôn đc gọi trước khi callback được gọi (trừ lần mounted)
 
+const lessons = [
+    {
+        id: 1,
+        name: 'NodeJS'
+    },
+    {
+        id: 2,
+        name: 'ReactJS'
+    },
+    {
+        id: 3,
+        name: 'MongoDB'
+    }
+]
 
 function Content() {
-    const [time, setTime] = useState(3);
-
-    console.log('re-render');
+    const [lessonId, setLessonId] = useState(1);
 
     useEffect(() => {
 
-        const handleTimer = () => {
-            setTime(pretime => {
-                if (pretime === 0) {
-                    clearInterval(interval);
-                    alert('Het gio');
-                    return pretime;
-                }
-                else {
-                    return pretime - 1;
-                }
-            })}
-
-
-        const interval = setInterval(handleTimer, 1000);
-
-        return () => {
-            clearInterval(interval);
+        const handleComment = ({ detail }) => {
+            console.log(detail);
         }
 
-    }, [])
+        window.addEventListener(`lesson-${lessonId}`, handleComment);
+        
+        return () => (
+            window.removeEventListener(`lesson-${lessonId}`, handleComment)
+        )
+    }, [lessonId])
 
     return (
         <div>
-            <h1>{time}</h1>
+            {
+                lessons.map(lesson => (
+                    <li
+                        key={lesson.id}
+                        style={
+                            {
+                                color: lessonId === lesson.id ?
+                                    'red' :
+                                    '#333'
+                            }
+                        }
+                        onClick={() => setLessonId(lesson.id)}
+                    >
+                        {lesson.name}
+                    </li>
+                ))
+            }
         </div>
     )
 }
