@@ -1,25 +1,60 @@
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo, useRef } from "react";
 import Content from './Content';
 
-// 1. memo() -> higher Order Component (HOC)
-// 2. useCallback 
-//    - Reference types
-//    - React memo()
+
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [products, setProducts] = useState([]);
 
-  const handleIncrease = useCallback(() => {
-    setCount(pre => pre + 1);
-  }, [])
+  const nameRef = useRef()
+
+  const handleSubmit = () => {
+    setProducts([...products, {
+      name: name,
+      price: parseInt(price)
+    }])
+    setName('');
+    setPrice('');
+
+    nameRef.current.focus();
+  }
+
+  const total = useMemo(() => {
+    const result = products.reduce((pre, cur) => {
+      console.log('Calculate again...');
+      return pre + cur.price;
+    }, 0);
+    return result;
+  }, [products])
 
   return (
-    <div style={{ padding: '50px' }}>
-      <Content
-        onIncrease={handleIncrease}
+    <div style={{ padding: '10px 32px' }}>
+      <input
+        ref={nameRef}
+        value={name}
+        placeholder="Enter name..."
+        onChange={e => setName(e.target.value)}
       />
-      <h1 >{count}</h1>
+      <br />
+      <input
+        value={price}
+        placeholder="Enter price..."
+        onChange={e => setPrice(e.target.value)}
+      />
+      <br />
+      <button onClick={handleSubmit}>Add</button>
+      <br />
+      Total: {total}
+      <ul>
+        {
+          products.map((product, index) => (
+            <li key={index}> {product.name} - {product.price} </li>
+          ))
+        }
+      </ul>
     </div>
   )
 }
