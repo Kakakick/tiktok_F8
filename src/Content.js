@@ -2,10 +2,13 @@
 import { useEffect, useState, useLayoutEffect, useRef, memo } from "react"
 
 
-function Content({count}) {
+function Content({ onIncrease }) {
     console.log('render');
     return (
-        <h1>Hello World {count}</h1>
+        <div>
+            <h1>Hello World </h1>
+            <button onClick={onIncrease}>Click me2!</button>
+        </div>
     )
 }
 
