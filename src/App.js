@@ -13,40 +13,63 @@ import Content from './Content';
 // 3. Reducer
 // 4. Dispatch
 
-const initState = 0;
+const init = ['Don vuon'];
 
-const UP_ACTION = 'up'
-const DOWN_ACTION = 'down'
+const ADD_ACTION = 'add'
+const REMOVE_ACTION = 'remove'
 
 const reducer = (state, action) => {
-  switch (action) {
-    case DOWN_ACTION:
-      return state - 1;
-    case UP_ACTION:
-      return state + 1;
+  switch (action.type) {
+    case ADD_ACTION:
+      return [...state, action.item];
+    case REMOVE_ACTION:
+      return state.filter(item => item !== action.item);
     default:
-      throw new Error('Invalid Action!');
+      throw new Error('Invalid Action');
   }
 }
 
 function App() {
-  const [count, dispatch] = useReducer(reducer, initState);
+  const [todos, dispatch] = useReducer(reducer, init);
+  const [newToDo, setNewToDo] = useState('');
 
-  console.log('render');
+  const handleAddToDo = () => {
+    setNewToDo('');
+    document.querySelector('input').focus();
+    return dispatch({
+      type: ADD_ACTION,
+      item: newToDo
+    })
+  }
+
+  const handleRemoveToDo = (todo) => {
+    setNewToDo('');
+    document.querySelector('input').focus();
+    return dispatch({
+      type: REMOVE_ACTION,
+      item: todo
+    })
+  }
 
   return (
     <div style={{ padding: '10px 32px' }}>
-      <h1>{count}</h1>
-      <button
-        onClick={() =>dispatch(UP_ACTION)}
-      >
-        Up
-      </button>
-      <button
-        onClick={() =>dispatch(DOWN_ACTION)}
-      >
-        Down
-      </button>
+      <h1>To Do List</h1>
+      <input
+        placeholder="Enter todo..."
+        value={newToDo}
+        onChange={(e) => setNewToDo(e.target.value)}
+      />
+      <button onClick={handleAddToDo}>Add</button>
+      <ul>
+        {
+          todos.map((value, index) =>
+            <li key={index}>
+               {value} 
+               <span onClick={() => handleRemoveToDo(value)}> &times; </span>
+            </li>
+          )
+        }
+      </ul>
     </div>
   )
 }
