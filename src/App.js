@@ -1,15 +1,22 @@
-
-import Content from './Content';
-import './App.css'
-import { useContext } from 'react';
-import { ThemeContext } from './ThemeProvider'
+import { useStore } from './store'
 
 function App() {
-  const value = useContext(ThemeContext)
+  const [state, dispatch] = useStore();
+
   return (
     <div style={{ padding: '10px 32px' }}>
-      <button onClick={value.toggleTheme}>Tonggle theme</button>
-      <Content />
+      <h1>Hello anh em F8, Đây là ToDo List</h1>
+      <input
+        value={state.todoInput}
+      />
+      <button>Add</button>
+      <ul>
+        {
+          state.todo.map((value, index) => (
+            <li key={index}> {value} </li>
+          ))
+        }
+      </ul>
     </div>
   )
 }
